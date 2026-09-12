@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block title %}Sign in · MedSafe AI{% endblock %}
+{% block public_content %}<div class="auth-page"><div class="auth-orb o1"></div><div class="auth-orb o2"></div>
+<div class="auth-card"><div class="auth-brand"><div class="logo-mark">✦</div><div><b>MedSafe AI</b><small>CLINICAL SAFETY PLATFORM</small></div></div>
+<div class="auth-copy"><span>SECURE CLINICAL WORKSPACE</span><h1>A calmer way to<br><em>protect every prescription.</em></h1><p>Verify medicines, build prescriptions and run rule-based safety checks from one clean workspace.</p></div>
+<form id="loginForm" class="auth-form"><label>Username<input id="username" required autocomplete="username" placeholder="Enter username"></label>
+<label>Password<div class="password"><input id="password" type="password" required autocomplete="current-password" placeholder="Enter password"><button type="button" onclick="togglePassword('password')">◉</button></div></label>
+<button class="btn primary wide">Sign in <span>→</span></button><div id="loginError" class="error"></div></form>
+<div class="demo-login"><span>BUILT-IN ADMIN ACCESS</span><div><b>Username:</b> admin &nbsp; <b>Password:</b> admin123</div><small>Each registered hospital uses its own unique username and password.</small></div>
+<div class="auth-foot">New hospital? <a href="/register">Begin your clinical workspace →</a></div>
+</div><div class="auth-side"><div class="mini-grid"><div>01<br><b>VERIFY</b></div><div>02<br><b>PRESCRIBE</b></div><div>03<br><b>ANALYZE</b></div></div></div></div>{% endblock %}
+{% block scripts %}<script>
+document.getElementById("loginForm").addEventListener("submit",async e=>{e.preventDefault();const r=await api("/api/login",{method:"POST",body:JSON.stringify({username:username.value,password:password.value})});if(r.success)location="/dashboard";else loginError.textContent=r.message||"Invalid credentials.";});
+</script>{% endblock %}

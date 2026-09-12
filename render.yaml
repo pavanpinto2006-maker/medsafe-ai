@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: medsafe-ai
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --workers 2 --threads 4 --timeout 120 app:app
+    healthCheckPath: /api/health
+    envVars:
+      - key: MEDSAFE_SECRET_KEY
+        generateValue: true
+      - key: MEDSAFE_DB_PATH
+        value: /var/data/medsafe.db
+    disk:
+      name: medsafe-data
+      mountPath: /var/data
+      sizeGB: 1

@@ -1,0 +1,52 @@
+{% extends "base.html" %}{% block title %}Begin your care space · MedSafe AI{% endblock %}
+{% block public_content %}
+<div class="register-v3">
+  <div class="register-v3-shell">
+    <nav class="register-v3-nav">
+      <a class="register-v3-brand" href="/" aria-label="MedSafe AI home">
+        <span class="register-v3-mark">✦</span><span><b>MedSafe</b><small>MEDICATION SAFETY</small></span>
+      </a>
+      <a class="register-v3-back" href="/">Already registered?<span>Sign in →</span></a>
+    </nav>
+
+    <main class="register-v3-main">
+      <section class="register-v3-copy">
+        <div class="register-v3-eyebrow">A THOUGHTFUL BEGINNING</div>
+        <h1>Care, with a little more <em>clarity.</em></h1>
+        <p>Bring your hospital into a quieter digital space for medication safety, verification and everyday clinical decisions.</p>
+        <div class="register-v3-quote">
+          <p>“Good care begins with good decisions — and good decisions begin with clarity.”</p>
+          <small>MedSafe AI · Care with confidence</small>
+        </div>
+      </section>
+
+      <section class="register-v3-card">
+        <div class="register-v3-card-head">
+          <div><h2>Begin your registration</h2><p>Set up your hospital access in a few simple steps.</p></div>
+          <span class="register-v3-step">01 · GET STARTED</span>
+        </div>
+        <form id="regForm" class="register-v3-form">
+          <div class="register-v3-section">Hospital details</div>
+          <div class="full"><label class="register-v3-label" for="hospital_name">Hospital name</label><input id="hospital_name" required placeholder="Enter your hospital name" autocomplete="organization"></div>
+          <div><label class="register-v3-label" for="email">Hospital email</label><input id="email" type="email" required placeholder="name@hospital.com" autocomplete="email"></div>
+          <div><label class="register-v3-label" for="phone">Contact number</label><input id="phone" placeholder="+91 98765 43210" autocomplete="tel"></div>
+          <div class="full"><label class="register-v3-label" for="address">Hospital address</label><input id="address" placeholder="City, state or full address" autocomplete="street-address"></div>
+          <div class="register-v3-section">Secure access</div>
+          <div><label class="register-v3-label" for="username">Choose a username</label><input id="username" required autocomplete="username" placeholder="Your hospital username"></div>
+          <div><label class="register-v3-label" for="password">Create a password</label><div class="register-v3-password"><input id="password" type="password" required minlength="6" autocomplete="new-password" placeholder="At least 6 characters"><button type="button" class="register-v3-eye" data-target="password" aria-label="Show password">◉</button></div></div>
+          <div class="full"><label class="register-v3-label" for="confirm">Confirm password</label><div class="register-v3-password"><input id="confirm" type="password" required autocomplete="new-password" placeholder="Enter the password again"><button type="button" class="register-v3-eye" data-target="confirm" aria-label="Show password">◉</button></div></div>
+          <div id="regMsg" class="register-v3-message"></div>
+          <div class="full"><button class="register-v3-submit" type="submit"><span>Create my care space</span><strong>→</strong></button></div>
+          <p class="register-v3-note">By continuing, you confirm that this workspace is being created for authorized hospital use.</p>
+        </form>
+      </section>
+    </main>
+    <footer class="register-v3-footer">A calmer interface for safer medication decisions.</footer>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script>
+const regForm=document.getElementById("regForm"),regMsg=document.getElementById("regMsg");
+regForm.addEventListener("submit",async e=>{e.preventDefault();regMsg.textContent="";const password=document.getElementById("password"),confirm=document.getElementById("confirm");if(password.value!==confirm.value){regMsg.textContent="The passwords do not match.";return}const d={hospital_name:document.getElementById("hospital_name").value,email:document.getElementById("email").value,username:document.getElementById("username").value,password:password.value,phone:document.getElementById("phone").value,address:document.getElementById("address").value};try{const r=await api("/api/register-hospital",{method:"POST",body:JSON.stringify(d)});if(r.success){location="/";}else regMsg.textContent=r.message||"We couldn't create this access yet."}catch(err){regMsg.textContent="We couldn't reach the server. Please try again."}});
+document.querySelectorAll(".register-v3-eye").forEach(btn=>btn.addEventListener("click",()=>{const input=document.getElementById(btn.dataset.target);input.type=input.type==="password"?"text":"password";btn.textContent=input.type==="password"?"◉":"◉";}));
+</script>{% endblock %}

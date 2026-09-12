@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}MedSafe AI{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+</head><body class="page-{{ request.path.strip('/').replace('/','-') or 'home' }}">
+{% if session.get('logged_in') %}
+<div class="shell"><aside class="sidebar" id="sidebar">
+  <div class="logo"><div class="logo-mark">✦</div><div><b>MedSafe</b><small>AI CLINICAL SAFETY</small></div></div>
+  <div class="side-label">WORKSPACE</div>
+  <nav>
+    <a href="/dashboard">◈ <span>Dashboard</span></a>
+    <a href="/patients">♙ <span>Patients</span></a>
+    <a href="/prescription">✚ <span>Prescription</span></a>
+    <a href="/safety-analysis">✓ <span>Safety Analysis</span></a>
+    <a href="/medicine-verification">⌕ <span>Medicine Verify</span></a>
+    <a href="/prescription-verification">◉ <span>Prescription Verify</span></a>
+  </nav>
+  <div class="side-bottom"><div class="protected"><i></i><div><b>Protected workspace</b><small>Rule-based clinical checks</small></div></div>
+  <button class="logout" onclick="logout()">↪ Sign out</button></div>
+</aside>
+<main class="main"><header class="topbar"><button class="hamb" onclick="toggleSidebar()">☰</button>
+  <div><span class="crumb">MEDSAFE AI /</span><h1>{% block page_title %}Clinical Dashboard{% endblock %}</h1></div>
+  <div class="account"><div class="avatar">{{(session.get('hospital_name','M')[:1])|upper}}</div><div><b>{{session.get('hospital_name','Hospital')}}</b><small>{{ 'Platform Administrator' if session.get('role') == 'super_admin' else 'Hospital Administrator · ' ~ session.get('username','Admin') }}</small></div></div>
+</header><section class="content">{% block content %}{% endblock %}</section></main></div>
+{% else %}{% block public_content %}{% endblock %}{% endif %}
+<div id="toast"></div><script src="{{url_for('static',filename='js/app.js')}}"></script>{% block scripts %}{% endblock %}
+</body></html>
